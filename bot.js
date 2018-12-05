@@ -78,7 +78,7 @@ client.on('message', msg => {
     }).catch(console.error);
     }
     catch(err){
-    msg.reply('Unite a un canal carajo D:');
+    msg.reply('No te encuentras en un canal D:');
     }
   }
 
