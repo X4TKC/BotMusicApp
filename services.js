@@ -6,9 +6,10 @@ function getSong(query, next){
         if (err) { return console.log(err); }
         //console.log(body);
         body.forEach((song) => {
-            console.log(song.title);
-            console.log(query);
-            if (stringSimilarity.compareTwoStrings(query, song.title) > 0.60) {
+            // console.log(song.title);
+            // console.log(query);
+            // console.log(stringSimilarity.compareTwoStrings(query, song.title));
+            if (stringSimilarity.compareTwoStrings(query.toLowerCase(), song.title.toLowerCase()) > 0.60) {
                 next(song.link);
                 return song;
             }
