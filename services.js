@@ -6,7 +6,13 @@ function getSongs(){
         console.log(body);
     });
 }
-
+function getUsers(){
+    request('http://localhost:3000/user/all', { json: true }, (err, res, body) => {
+        if (err) { return console.log(err); }
+        console.log(body);
+    });
+}
 module.exports = {
-  getSongs
+  getSongs,
+  getUsers
 };

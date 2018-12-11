@@ -15,7 +15,10 @@ client.on('message', msg => {
         msg.reply('Pong!');
         services.getSongs();
     } else if (msg.content === 'Hola') {
+
+        
         msg.reply('Hola chitos!');
+        services.getUsers();
     } else if (msg.content === 'Pewdiepie') {
 
         let voiceChannel = msg.member.voiceChannel;
