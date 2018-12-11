@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-var auth = require('./auth.json');
+const auth = require('./auth.json');
+const services = require('./services');
 const ytdl = require('ytdl-core');
 const streamOptions = {seek: 0, volume: 1};
 
@@ -12,6 +13,7 @@ client.on('message', msg => {
     let directive = msg.content.split(" ");
     if (msg.content === 'ping') {
         msg.reply('Pong!');
+        services.getSongs();
     } else if (msg.content === 'Hola') {
         msg.reply('Hola chitos!');
     } else if (msg.content === 'Pewdiepie') {
