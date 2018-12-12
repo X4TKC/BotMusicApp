@@ -28,11 +28,18 @@ function getPlaylists(){
         console.log(body);
     });
 }
+function getByName(name){
+    request('http://localhost:3000/playlist/getByName?name='+name, { json: true }, (err, res, body) => {
+        if (err) { return console.log(err); }
+        console.log(body);
+    });
+}
 module.exports = {
 
   getSong,
   getUsers,
-  getPlaylists
+  getPlaylists,
+  getByName
 
 
 
