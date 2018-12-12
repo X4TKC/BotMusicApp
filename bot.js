@@ -13,7 +13,7 @@ client.on('message', msg => {
     let directive = msg.content.split(" ");
     if (msg.content === 'ping') {
         msg.reply('Pong!');
-        services.getSong();
+        //services.getSong();
     } else if (msg.content === 'Hola') {
 
         
@@ -93,7 +93,7 @@ client.on('message', msg => {
             });
             voiceChannel.join().then(connection => {
                 services.getSong(query, (url) => {
-                    console.log('stream playing');
+                    console.log('stream playing: ' + query);
                     const stream = ytdl(url, {filter: 'audioonly'});
                     connection.playStream(stream, streamOptions);
                 });
@@ -103,7 +103,6 @@ client.on('message', msg => {
         }
     }else if(directive[0] === '&Play'){
         let voiceChannel = msg.member.voiceChannel;
-
         try {
             let query = "";
             directive.slice(1).forEach((word) => {
