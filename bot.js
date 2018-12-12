@@ -13,12 +13,12 @@ client.on('message', msg => {
     let directive = msg.content.split(" ");
     if (msg.content === 'ping') {
         msg.reply('Pong!');
-        //services.getSong();
+       // services.getSong();
     } else if (msg.content === 'Hola') {
 
         
         msg.reply('Hola chitos!');
-        services.getUsers();
+        services.getPlaylists();
     } else if (msg.content === 'Pewdiepie') {
 
         let voiceChannel = msg.member.voiceChannel;
@@ -103,6 +103,7 @@ client.on('message', msg => {
         }
     }else if(directive[0] === '&Play'){
         let voiceChannel = msg.member.voiceChannel;
+
         try {
             let query = "";
             directive.slice(1).forEach((word) => {
