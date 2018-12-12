@@ -13,7 +13,7 @@ client.on('message', msg => {
     let directive = msg.content.split(" ");
     if (msg.content === 'ping') {
         msg.reply('Pong!');
-        services.getSong();
+       // services.getSong();
     } else if (msg.content === 'Hola') {
 
         

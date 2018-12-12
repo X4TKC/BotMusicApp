@@ -22,10 +22,17 @@ function getUsers(){
         console.log(body);
     });
 }
+function getPlaylists(){
+    request('http://localhost:3000/playlist/allPlaylist', { json: true }, (err, res, body) => {
+        if (err) { return console.log(err); }
+        console.log(body);
+    });
+}
 module.exports = {
 
   getSong,
-  getUsers
+  getUsers,
+  getPlaylists
 
 
 
