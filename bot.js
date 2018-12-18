@@ -47,6 +47,10 @@ client.on('message', msg => {
         voiceChannel.join().then(connection => {
             const stream = ytdl('https://www.youtube.com/watch?v=1HVv2saWOl0', {filter: 'audioonly'});
             const dispatcher = connection.playStream(stream, streamOptions);
+            dispatcher.on("end", end => {
+                console.log("left channel");
+                voiceChannel.leave();
+            });
         }).catch(console.error);
     } else if (msg.content === 'RIP') {
 
@@ -79,23 +83,9 @@ client.on('message', msg => {
             voiceChannel.join().then(connection => {
                 const stream = ytdl(directive[1], {filter: 'audioonly'});
                 const dispatcher = connection.playStream(stream, streamOptions);
-            }).catch(console.error);
-        } catch (err) {
-            msg.reply('No te encuentras en un canal D:');
-        }
-    }else if(directive[0] === '&Play'){
-        let voiceChannel = msg.member.voiceChannel;
-
-        try {
-            let query = "";
-            directive.slice(1).forEach((word) => {
-                query += word + " ";
-            });
-            voiceChannel.join().then(connection => {
-                services.getSong(query, (url) => {
-                    console.log('stream playing: ' + query);
-                    const stream = ytdl(url, {filter: 'audioonly'});
-                    connection.playStream(stream, streamOptions);
+                dispatcher.on("end", end => {
+                    console.log("left channel");
+                    voiceChannel.leave();
                 });
             }).catch(console.error);
         } catch (err) {
@@ -113,7 +103,11 @@ client.on('message', msg => {
                 services.getSong(query, (url) => {
                     console.log('stream playing');
                     const stream = ytdl(url, {filter: 'audioonly'});
-                    connection.playStream(stream, streamOptions);
+                    const dispatcher = connection.playStream(stream, streamOptions);
+                    dispatcher.on("end", end => {
+                        console.log("left channel");
+                        voiceChannel.leave();
+                    });
                 });
             }).catch(console.error);
         } catch (err) {
