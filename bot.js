@@ -3,8 +3,9 @@ const client = new Discord.Client();
 const auth = require('./auth.json');
 const services = require('./services');
 const ytdl = require('ytdl-core');
+let dispatcher = null;
 const streamOptions = {seek: 0, volume: 1};
-
+let queue = [];
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -13,10 +14,10 @@ client.on('message', msg => {
     let directive = msg.content.split(" ");
     if (msg.content === 'ping') {
         msg.reply('Pong!');
-       // services.getSong();
+        // services.getSong();
     } else if (msg.content === 'Hola') {
 
-        
+
         msg.reply('Hola chitos!');
         services.getPlaylists();
     } else if (msg.content === 'Pewdiepie') {
@@ -77,7 +78,7 @@ client.on('message', msg => {
         } catch (err) {
             msg.reply('No te encuentras en un canal D:');
         }
-    }else if(directive[0] === '&Start'){
+    } else if (directive[0] === '&Start') {
         let voiceChannel = msg.member.voiceChannel;
         try {
             voiceChannel.join().then(connection => {
@@ -91,7 +92,7 @@ client.on('message', msg => {
         } catch (err) {
             msg.reply('No te encuentras en un canal D:');
         }
-    }else if(directive[0] === '&Play'){
+    } else if (directive[0] === '&Play') {
         let voiceChannel = msg.member.voiceChannel;
 
         try {
@@ -101,19 +102,49 @@ client.on('message', msg => {
             });
             voiceChannel.join().then(connection => {
                 services.getSong(query, (url) => {
-                    console.log('stream playing');
-                    const stream = ytdl(url, {filter: 'audioonly'});
-                    const dispatcher = connection.playStream(stream, streamOptions);
-                    dispatcher.on("end", end => {
-                        console.log("left channel");
-                        voiceChannel.leave();
-                    });
+                    startStream(url);
                 });
             }).catch(console.error);
         } catch (err) {
             msg.reply('No te encuentras en un canal D:');
         }
+    } else if (directive[0] === '&enq') {
+        let query = "";
+        console.log('enqueued');
+        directive.slice(1).forEach((word) => {
+            query += word + " ";
+        });
+        services.getSong(query, (url) => {
+            queue.push(url);
+        });
+
+
     }
 });
+
+function startStream(url) {
+    console.log('stream playing');
+    const stream = ytdl(url, {filter: 'audioonly'});
+    if (dispatcher == null) {
+        dispatcher = client.voiceConnections.first().playStream(stream, streamOptions);
+        dispatcher.on("end", end => {
+            playNext();
+        });
+    } else {
+        dispatcher = client.voiceConnections.first().playStream(stream, streamOptions);
+        dispatcher.on("end", end => {
+            playNext();
+        });
+    }
+}
+
+function playNext() {
+    if (queue.length === 0) {
+        console.log('should stop stream');
+        client.voiceConnections.first().disconnect();
+    } else {
+        startStream(queue.shift());
+    }
+}
 
 client.login(auth.token);
