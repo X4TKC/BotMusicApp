@@ -12,6 +12,7 @@ client.on('ready', () => {
 
 client.on('message', msg => {
     let directive = msg.content.split(" ");
+   
     if (msg.content === 'ping') {
         msg.reply('Pong!');
         // services.getSong();
@@ -94,7 +95,14 @@ client.on('message', msg => {
         }
     } else if (directive[0] === '&Play') {
         let voiceChannel = msg.member.voiceChannel;
-
+        
+        if(services.getUser(msg.author.id)){
+           console.log('user already exists')
+            
+        }else{
+            services.insertUser(msg.author.username,msg.author.id);
+            console.log("new user");
+        }
         try {
             let query = "";
             directive.slice(1).forEach((word) => {

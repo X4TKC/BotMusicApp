@@ -34,12 +34,41 @@ function getByName(name){
         console.log(body);
     });
 }
+function insertUser(id,discordid){
+    request({
+        headers: {
+        'Accept':'application/json',
+        'Accept-Encoding':'application/json',
+        'Content-Type': 'application/json'
+        },
+        url: 'http://localhost:3000/user/ins',
+        json: true,
+        body: {username: id, discordid: discordid},
+        method: 'POST'
+      }, (err, res, body) => {
+        console.log(body);
+      });
+
+
+}
+
+
+function getUser(id){
+    request('http://localhost:3000/user/getByDiscordid?discordid='+id, { json: true }, (err, res, body) => {
+        if (err) { console.log(err); }
+        console.log(body);
+        return body;
+    });
+
+}
 module.exports = {
 
   getSong,
   getUsers,
   getPlaylists,
-  getByName
+  getByName,
+  getUser,
+  insertUser
 
 
 
