@@ -127,7 +127,51 @@ client.on('message', msg => {
         });
 
 
-    }
+    }else if (directive[0] === '&Genre') {
+        let voiceChannel = msg.member.voiceChannel;
+        try {
+            let query = "";
+            directive.slice(1).forEach((word) => {
+                query += word + " ";
+            });
+            voiceChannel.join().then(connection => {
+                services.getSongbyGenre(query, (playlist) => {
+                    queue = playlist;
+                    startStream(queue.shift());
+                });
+            }).catch(console.error);
+        } catch (err) {
+            msg.reply('No te encuentras en un canal D:');
+        }
+    }else if (directive[0] === '&Next') {
+        try {
+            dispatcher.end();
+        } catch (err) {
+            msg.reply('Atatau');
+        }
+     } //else if (msg.content === 'lolis') {
+    //
+    //     let voiceChannel = msg.member.voiceChannel;
+    //     voiceChannel.join().then(connection => {
+    //         const stream = ytdl('https://www.youtube.com/watch?v=b8i921cgWwE', {filter: 'audioonly'});
+    //         dispatcher = connection.playStream(stream, {seek: 0, volume: 10});
+    //         dispatcher.on("end", end => {
+    //             console.log("left channel");
+    //             voiceChannel.leave();
+    //         });
+    //     }).catch(console.error);
+    // } else if (msg.content === 'crabs') {
+    //
+    //     let voiceChannel = msg.member.voiceChannel;
+    //     voiceChannel.join().then(connection => {
+    //         const stream = ytdl('https://www.youtube.com/watch?v=eqSf5Tj7YaA', {filter: 'audioonly'});
+    //         dispatcher = connection.playStream(stream, {seek: 0, volume: 1});
+    //         dispatcher.on("end", end => {
+    //             console.log("left channel");
+    //             voiceChannel.leave();
+    //         });
+    //     }).catch(console.error);
+    // }
 });
 
 function startStream(url) {
@@ -147,6 +191,7 @@ function startStream(url) {
 }
 
 function playNext() {
+    console.log(queue.length);
     if (queue.length === 0) {
         console.log('should stop stream');
         client.voiceConnections.first().disconnect();
